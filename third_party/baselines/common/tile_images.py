@@ -13,6 +13,7 @@ def tile_images(img_nhwc):
         bigim_HWc, ndarray with ndim=3
     """
     img_nhwc = np.asarray(img_nhwc)
+    # Add a bunch of stuff here
     N, h, w, c = img_nhwc.shape
     H = int(np.ceil(np.sqrt(N)))
     W = int(np.ceil(float(N)/H))
