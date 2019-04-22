@@ -350,6 +350,8 @@ def run_training():
     policy_training_params = get_ppo_plus_ec_params(
         FLAGS.scenario,
         get_trained_r_net_path(FLAGS.scenario, r_net_workdir))
+    print(policy_training_params)
+    print(0/0)
   else:
     raise NotImplementedError(
         'method {} is not implemented.'.format(FLAGS.method))
@@ -357,11 +359,11 @@ def run_training():
   policy_training_params.update({
       'workdir': workdir,
       'num_env': str(FLAGS.num_env),
-      'env_name': ('dmlab:' + constants.Const.find_level_by_scenario(
-          FLAGS.scenario).fully_qualified_name),
+      'env_name': ('atari:MontezumaRevenge-v0'),
       'num_timesteps': str(FLAGS.num_timesteps)})
   print('Params for scenario', FLAGS.scenario, ':\n', policy_training_params)
   tf.gfile.MakeDirs(workdir)
+  print(policy_training_params)
   base_command = [PYTHON_BINARY, '-m', 'episodic_curiosity.train_policy']
   logged_check_call(assemble_command(
       base_command, policy_training_params))

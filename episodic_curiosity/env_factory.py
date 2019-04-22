@@ -205,7 +205,7 @@ def create_environments(env_name,
                         scale_task_reward_for_eval = 1.0,
                         scale_surrogate_reward_for_eval = 0.0,
                         online_r_training = False,
-                        environment_engine = 'dmlab',
+                        environment_engine = 'atari',
                         r_network_weights_store_path = ''):
   """Creates a environments with R-network-based curiosity reward.
 
