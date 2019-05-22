@@ -24,7 +24,6 @@ VERSION = '1.0.0'
 install_requires = [
     # See installation instructions:
     # https://github.com/deepmind/lab/tree/master/python/pip_package
-    'DeepMind-Lab',
     'absl-py>=0.7.0',
     'dill>=0.2.9',
     'enum>=0.4.7',
