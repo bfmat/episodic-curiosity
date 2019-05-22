@@ -223,8 +223,6 @@ class CuriosityEnvWrapper(VecEnvWrapper):
 
   def step_wait(self):
     """Overrides VecEnvWrapper.step_wait."""
-    print("STEP_WAIT______________________________________________________")
-    self.venv.render()
     observations, rewards, dones, infos = self.venv.step_wait()
     for observer in self._observers:
       observer.on_new_observation(observations, rewards, dones, infos)

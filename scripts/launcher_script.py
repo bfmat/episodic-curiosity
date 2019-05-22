@@ -350,8 +350,6 @@ def run_training():
     policy_training_params = get_ppo_plus_ec_params(
         FLAGS.scenario,
         get_trained_r_net_path(FLAGS.scenario, r_net_workdir))
-    print(policy_training_params)
-    print(0/0)
   else:
     raise NotImplementedError(
         'method {} is not implemented.'.format(FLAGS.method))
