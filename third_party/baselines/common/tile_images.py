@@ -1,7 +1,7 @@
 # coding=utf-8
 import numpy as np
 
-def tile_images(weird_list):
+def tile_images(img_nhwc):
     """
     Original docs:
     Tile N images into one big PxQ image
@@ -16,8 +16,7 @@ def tile_images(weird_list):
     Actually:
     weird_list is some kind of list which contains LazyFrames objects amongst a bunch of irrelevant stuff
     """
-    frames = [row[0] for row in weird_list]
-    img_nhwc = np.array(frames)
+    img_nhwc = np.array(img_nhwc)
     N, h, w, c = img_nhwc.shape
     H = int(np.ceil(np.sqrt(N)))
     W = int(np.ceil(float(N)/H))
