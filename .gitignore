@@ -4,3 +4,4 @@ r_networks/
 episodic_curiosity.egg-info/
 *.pyc
 third_party/dmlab/
+env/
