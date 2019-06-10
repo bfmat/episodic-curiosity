@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # coding=utf-8
 # Copyright 2019 Google LLC.
 #
@@ -35,7 +37,7 @@ import tensorflow as tf
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('workdir', None,
+flags.DEFINE_string('workdir', '~/ec_results',
                     'Directory where all experiment results will be stored')
 flags.mark_flag_as_required('workdir')
 
@@ -361,7 +363,6 @@ def run_training():
       'num_timesteps': str(FLAGS.num_timesteps)})
   print('Params for scenario', FLAGS.scenario, ':\n', policy_training_params)
   tf.gfile.MakeDirs(workdir)
-  print(policy_training_params)
   base_command = [PYTHON_BINARY, '-m', 'episodic_curiosity.train_policy']
   logged_check_call(assemble_command(
       base_command, policy_training_params))

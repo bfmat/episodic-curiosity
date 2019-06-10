@@ -4,3 +4,4 @@ r_networks/
 episodic_curiosity.egg-info/
 *.pyc
 env/
+env_bak/

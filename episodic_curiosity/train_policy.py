@@ -41,7 +41,7 @@ import tensorflow as tf
 
 flags.DEFINE_string('workdir', None,
                     'Root directory for writing logs/summaries/checkpoints.')
-flags.DEFINE_string('env_name', 'CartPole-v0', 'What environment to run')
+flags.DEFINE_string('env_name', 'atari:Breakout-v0', 'What environment to run')
 flags.DEFINE_string('policy_architecture', 'cnn',
                     'What model architecture to use')
 flags.DEFINE_string('r_checkpoint', '', 'Location of the R-network checkpoint')
