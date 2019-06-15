@@ -181,7 +181,7 @@ def train(workdir, env_name, num_timesteps,
       policy_evaluator_on_valid.evaluate(model_step_fn, global_step)
     policy_evaluator_on_test.evaluate(model_step_fn, global_step)
 
-  with tf.Session():
+  with tf.Session(config=tf.ConfigProto(log_device_placement=True)):
     policy = {'cnn': policies.CnnPolicy,
               'lstm': policies.LstmPolicy,
               'lnlstm': policies.LnLstmPolicy,
