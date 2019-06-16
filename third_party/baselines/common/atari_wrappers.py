@@ -5,6 +5,7 @@ import gym
 from gym import spaces
 import cv2
 cv2.ocl.setUseOpenCL(False)
+from collect_gym_dataset import CollectGymDataset
 
 class NoopResetEnv(gym.Wrapper):
     def __init__(self, env, noop_max=30):
@@ -221,6 +222,7 @@ def make_atari(env_id):
 def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, scale=False):
     """Configure environment for DeepMind-style Atari.
     """
+    env = CollectGymDataset(env, '~/ec_outputs')
     if episode_life:
         env = EpisodicLifeEnv(env)
     if 'FIRE' in env.unwrapped.get_action_meanings():

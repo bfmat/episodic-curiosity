@@ -235,7 +235,8 @@ class Runner(AbstractEnvRunner):
 
       for info in infos:
         maybeepinfo = info.get('episode')
-        if maybeepinfo: epinfos.append(maybeepinfo)
+        if maybeepinfo:
+            epinfos.append(maybeepinfo)
       mb_rewards.append(rewards)
     # batch of steps to batch of rollouts
     mb_obs = np.asarray(mb_obs, dtype=self.obs.dtype)
@@ -383,11 +384,13 @@ def learn(policy, env, nsteps, total_timesteps, ent_coef, lr,
       logger.logkv('total_timesteps', update*nbatch)
       logger.logkv('fps', fps)
       logger.logkv('explained_variance', float(ev))
-      logger.logkv('eprewmean', safemean([epinfo['r'] for epinfo in epinfobuf]))
-      logger.logkv('eplenmean', safemean([epinfo['l'] for epinfo in epinfobuf]))
+      for epinfo in epinfobuf:
+          pass # print('EPINFO:', epinfo)
+      logger.logkv('eprewmean', safemean([np.mean(epinfo['reward']) for epinfo in epinfobuf]))
+      logger.logkv('eplenmean', safemean([len(epinfo['reward']) for epinfo in epinfobuf]))
       if train_callback:
-        train_callback(safemean([epinfo['l'] for epinfo in epinfobuf]),
-                       safemean([epinfo['r'] for epinfo in epinfobuf]),
+        train_callback(safemean([np.mean(epinfo['reward']) for epinfo in epinfobuf]),
+                       safemean([len(epinfo['reward']) for epinfo in epinfobuf]),
                        update * nbatch)
       logger.logkv('time_elapsed', tnow - tfirststart)
       for (lossval, lossname) in zip(lossvals, model.loss_names):

@@ -5,3 +5,4 @@ episodic_curiosity.egg-info/
 *.pyc
 env/
 env_bak/
+*.swp
