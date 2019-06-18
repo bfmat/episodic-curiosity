@@ -37,6 +37,7 @@ class CollectGymDataset(object):
       return lambda: self._process_reset(future())
 
   def _process_step(self, action, observ, reward, done, info):
+    print('step', done)
     self._transition.update({'action': action, 'reward': reward})
     self._transition.update(info)
     self._episode.append(self._transition)

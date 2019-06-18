@@ -64,6 +64,8 @@ class EpisodicLifeEnv(gym.Wrapper):
         gym.Wrapper.__init__(self, env)
         self.lives = 0
         self.was_real_done  = True
+        self.timeout_exit = False
+        self.elapsed_steps = 0
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
@@ -77,6 +79,13 @@ class EpisodicLifeEnv(gym.Wrapper):
             # the environment advertises done.
             done = True
         self.lives = lives
+
+        self.elapsed_steps += 1
+        if self.elapsed_steps >= 5:
+            print('exiting from elapsed_steps')
+            done = True
+            self.timeout_exit = True
+
         return obs, reward, done, info
 
     def reset(self, **kwargs):
@@ -84,8 +93,10 @@ class EpisodicLifeEnv(gym.Wrapper):
         This way all states are still reachable even though lives are episodic,
         and the learner need not know about any of this behind-the-scenes.
         """
-        if self.was_real_done:
+        if self.was_real_done or self.timeout_exit:
             obs = self.env.reset(**kwargs)
+            self.timeout_exit = False
+            self.elapsed_steps = 0
         else:
             # no-op step to advance from terminal/lost life state
             obs, _, _, _ = self.env.step(0)
@@ -223,8 +234,6 @@ def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, 
     """Configure environment for DeepMind-style Atari.
     """
     env = CollectGymDataset(env, '~/ec_outputs')
-    if episode_life:
-        env = EpisodicLifeEnv(env)
     if 'FIRE' in env.unwrapped.get_action_meanings():
         env = FireResetEnv(env)
     env = WarpFrame(env)
@@ -234,5 +243,8 @@ def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, 
         env = ClipRewardEnv(env)
     if frame_stack:
         env = FrameStack(env, 4)
+    if episode_life:
+        pass # env = EpisodicLifeEnv(env)
     return env
+
 
