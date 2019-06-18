@@ -81,8 +81,7 @@ class EpisodicLifeEnv(gym.Wrapper):
         self.lives = lives
 
         self.elapsed_steps += 1
-        if self.elapsed_steps >= 5:
-            print('exiting from elapsed_steps')
+        if self.elapsed_steps >= 48000:
             done = True
             self.timeout_exit = True
 

@@ -15,13 +15,7 @@ def worker(remote, parent_remote, env_fn_wrapper):
     while True:
         cmd, data = remote.recv()
         if cmd == 'step':
-            a = env.step(data)
-            if len(a) == 5:
-                print('trying to exit', a)
-                0/0
-                done = True
-            else:
-                ob, reward, done, info = a
+            ob, reward, done, info = env.step(data)
             if done:
                 ob = env.reset()
             remote.send((ob, reward, done, info))
