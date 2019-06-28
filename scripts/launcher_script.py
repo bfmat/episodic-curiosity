@@ -59,7 +59,7 @@ flags.DEFINE_integer('run_number',
 flags.DEFINE_integer('num_timesteps', 20000000,
                      'Number of training timesteps to run.')
 
-flags.DEFINE_integer('num_env', 12,
+flags.DEFINE_integer('num_env', 16,
                      'Number of envs to run in parallel for training the '
                      'policy.')
 
@@ -359,7 +359,7 @@ def run_training():
   policy_training_params.update({
       'workdir': workdir,
       'num_env': str(FLAGS.num_env),
-      'env_name': ('atari:MontezumaRevengeNoFrameskip-v4'),
+      'env_name': ('atari:BreakoutNoFrameskip-v4'),
       'num_timesteps': str(FLAGS.num_timesteps)})
   print('Params for scenario', FLAGS.scenario, ':\n', policy_training_params)
   tf.gfile.MakeDirs(workdir)

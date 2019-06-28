@@ -231,7 +231,8 @@ class Runner(AbstractEnvRunner):
         # Clip to [-1, 1] range intrinsic reward.
         intrinsic_reward = [
             max(min(x, 1.0), -1.0) for x in intrinsic_reward]
-        rewards += intrinsic_reward
+        #rewards += intrinsic_reward
+        rewards = intrinsic_reward
 
       for info in infos:
         maybeepinfo = info.get('episode')
