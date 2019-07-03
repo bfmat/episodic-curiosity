@@ -223,6 +223,7 @@ class Runner(AbstractEnvRunner):
       mb_neglogpacs.append(neglogpacs)
       mb_dones.append(self.dones)
       self.obs[:], rewards, self.dones, infos = self.env.step(actions)
+      print('REWARDS:', rewards)
       mb_next_obs.append(self.obs.copy())
 
       if self.model.state_encoder_net:
@@ -247,7 +248,9 @@ class Runner(AbstractEnvRunner):
     mb_values = np.asarray(mb_values, dtype=np.float32)
     mb_neglogpacs = np.asarray(mb_neglogpacs, dtype=np.float32)
     mb_dones = np.asarray(mb_dones, dtype=np.bool)
-    last_values = self.model.value(self.obs, self.states, self.dones)
+    last_values = self.model.value(self.obs, self.states, [0] * len(self.dones))
+    print('last_values:', last_values)
+    #last_values = self.model.value(self.obs, self.states, self.dones)
     # discount/bootstrap off value fn
     mb_returns = np.zeros_like(mb_rewards)
     mb_advs = np.zeros_like(mb_rewards)
@@ -259,8 +262,9 @@ class Runner(AbstractEnvRunner):
       else:
         nextnonterminal = 1.0 - mb_dones[t+1]
         nextvalues = mb_values[t+1]
-      delta = (mb_rewards[t] + self.gamma * nextvalues * nextnonterminal -
-               mb_values[t])
+      nextnonterminal = 1.0
+      #delta = (mb_rewards[t] + self.gamma * nextvalues * nextnonterminal - mb_values[t])
+      delta = (mb_rewards[t] + self.gamma * nextvalues - mb_values[t])
       mb_advs[t] = lastgaelam = (delta + self.gamma * self.lam *
                                  nextnonterminal * lastgaelam)
     mb_returns = mb_advs + mb_values

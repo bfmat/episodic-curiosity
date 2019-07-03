@@ -186,7 +186,7 @@ def create_single_env(env_name, seed, dmlab_homepath, use_monitor,
 def create_single_atari_env(env_name, seed, use_monitor, split=''):
   env = atari_wrappers.make_atari(env_name)
   env.seed(seed)
-  env = atari_wrappers.EpisodicLifeEnv(env)
+  #env = atari_wrappers.EpisodicLifeEnv(env)
   if use_monitor:
     env = Monitor(
         env, logger.get_dir() and os.path.join(logger.get_dir(), str(seed)))
