@@ -223,7 +223,6 @@ class Runner(AbstractEnvRunner):
       mb_neglogpacs.append(neglogpacs)
       mb_dones.append(self.dones)
       self.obs[:], rewards, self.dones, infos = self.env.step(actions)
-      print('REWARDS:', rewards)
       mb_next_obs.append(self.obs.copy())
 
       if self.model.state_encoder_net:
