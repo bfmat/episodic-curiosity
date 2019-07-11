@@ -16,6 +16,7 @@ class CollectGymDataset(object):
     self._outdir = outdir and os.path.expanduser(outdir)
     self._episode = None
     self._transition = None
+    self._actual_reset = True
 
   def __getattr__(self, name):
     return getattr(self._env, name)
@@ -41,9 +42,10 @@ class CollectGymDataset(object):
     self._transition.update(info)
     self._episode.append(self._transition)
     self._transition = {}
-    if not done:
+    if (not done) or (not self.was_real_done):
       self._transition.update(self._process_observ(observ))
     else:
+      self._actual_reset = True
       episode = self._get_episode()
       info['episode'] = episode
       if self._outdir:
@@ -52,9 +54,11 @@ class CollectGymDataset(object):
     return observ, reward, done, info
 
   def _process_reset(self, observ):
-    self._episode = []
-    self._transition = {}
-    self._transition.update(self._process_observ(observ))
+    if self._actual_reset:
+        self._actual_reset = False
+        self._episode = []
+        self._transition = {}
+        self._transition.update(self._process_observ(observ))
     return observ
 
   def _process_observ(self, observ):

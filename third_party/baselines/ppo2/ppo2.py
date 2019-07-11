@@ -386,12 +386,12 @@ def learn(policy, env, nsteps, total_timesteps, ent_coef, lr,
       logger.logkv('explained_variance', float(ev))
       for epinfo in epinfobuf:
           pass # print('EPINFO:', epinfo)
-      logger.logkv('eprewmean', safemean([np.mean(epinfo['reward']) for epinfo in epinfobuf]))
-      logger.logkv('eplenmean', safemean([len(epinfo['reward']) for epinfo in epinfobuf]))
-      if train_callback:
-        train_callback(safemean([np.mean(epinfo['reward']) for epinfo in epinfobuf]),
-                       safemean([len(epinfo['reward']) for epinfo in epinfobuf]),
-                       update * nbatch)
+      #logger.logkv('eprewmean', safemean([np.mean(epinfo['reward']) for epinfo in epinfobuf]))
+      #logger.logkv('eplenmean', safemean([len(epinfo['reward']) for epinfo in epinfobuf]))
+      #if train_callback:
+      #  train_callback(safemean([np.mean(epinfo['reward']) for epinfo in epinfobuf]),
+      #                 safemean([len(epinfo['reward']) for epinfo in epinfobuf]),
+      #                 update * nbatch)
       logger.logkv('time_elapsed', tnow - tfirststart)
       for (lossval, lossname) in zip(lossvals, model.loss_names):
         logger.logkv(lossname, lossval)
