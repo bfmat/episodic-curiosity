@@ -169,6 +169,7 @@ class DMLabWrapper(gym.Env):
     level_name = args.pop('levelName')
     observation_format = args.pop('observationFormat')
     renderer = args.pop('renderer')
+    print(renderer)
     seed = args.pop('seed')
     string_args = {key: str(value) for key, value in args.items()}
     if homepath:
