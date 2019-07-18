@@ -170,7 +170,7 @@ def create_single_env(env_name, seed, dmlab_homepath, use_monitor,
       env_settings,
       action_set=get_action_set(action_set),
       main_observation=main_observation)
-  env = CollectGymDataset(env, os.path.expanduser('~/ec_outputs_5/'))
+  env = CollectGymDataset(env, os.path.expanduser('~/ec_outputs_5/'), atari=False)
 
   if run_oracle_before_monitor:
     env = dmlab_utils.OracleRewardWrapper(env)

@@ -11,12 +11,13 @@ import tensorflow as tf
 class CollectGymDataset(object):
   """Collect transition tuples and store episodes as Numpy files."""
 
-  def __init__(self, env, outdir):
+  def __init__(self, env, outdir, atari=True):
     self._env = env
     self._outdir = outdir and os.path.expanduser(outdir)
     self._episode = None
     self._transition = None
     self._actual_reset = True
+    self._atari = atari
 
   def __getattr__(self, name):
     return getattr(self._env, name)
@@ -42,7 +43,7 @@ class CollectGymDataset(object):
     self._transition.update(info)
     self._episode.append(self._transition)
     self._transition = {}
-    if (not done) or (not self.was_real_done):
+    if (not done) or (self._atari and not self.was_real_done):
       self._transition.update(self._process_observ(observ))
     else:
       self._actual_reset = True
