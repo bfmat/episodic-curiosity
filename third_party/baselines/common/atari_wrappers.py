@@ -222,14 +222,6 @@ class LazyFrames(object):
     def __getitem__(self, i):
         return self._force()[i]
 
-def make_atari(env_id):
-    env = gym.make(env_id)
-    # assert 'NoFrameskip' in env.spec.id
-    env = NoopResetEnv(env, noop_max=30)
-    env = StickyActionEnv(env)
-    env = MaxAndSkipEnv(env, skip=4)
-    return env
-
 class StickyActionEnv(gym.Wrapper):
     def __init__(self, env, p=0.25):
         super(StickyActionEnv, self).__init__(env)
@@ -248,6 +240,14 @@ class StickyActionEnv(gym.Wrapper):
         if reward != 0:
             pass #print('reward:', reward)
         return obs, reward, done, info
+
+def make_atari(env_id):
+    env = gym.make(env_id)
+    # assert 'NoFrameskip' in env.spec.id
+    env = NoopResetEnv(env, noop_max=30)
+    env = StickyActionEnv(env)
+    env = MaxAndSkipEnv(env, skip=4)
+    return env
 
 def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, scale=False):
     """Configure environment for DeepMind-style Atari.

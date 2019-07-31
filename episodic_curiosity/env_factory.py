@@ -35,7 +35,6 @@ from third_party.baselines.common import atari_wrappers
 from third_party.baselines.common.vec_env import subproc_vec_env
 from third_party.baselines.common.vec_env import threaded_vec_env
 from third_party.keras_resnet import models
-from third_party.baselines.common.collect_gym_dataset import CollectGymDataset
 import gin
 
 
@@ -170,7 +169,6 @@ def create_single_env(env_name, seed, dmlab_homepath, use_monitor,
       env_settings,
       action_set=get_action_set(action_set),
       main_observation=main_observation)
-  env = CollectGymDataset(env, os.path.expanduser('~/ec_outputs_5/'), atari=False)
 
   if run_oracle_before_monitor:
     env = dmlab_utils.OracleRewardWrapper(env)
@@ -208,8 +206,7 @@ def create_environments(env_name,
                         scale_task_reward_for_eval = 1.0,
                         scale_surrogate_reward_for_eval = 0.0,
                         online_r_training = False,
-                        environment_engine = 'dmlab',
-                        #environment_engine = 'atari',
+                        environment_engine = 'atari',
                         r_network_weights_store_path = ''):
   """Creates a environments with R-network-based curiosity reward.
 
@@ -232,7 +229,6 @@ def create_environments(env_name,
   Returns:
     Wrapped environment with curiosity.
   """
-  print('ENV_NAME', env_name, environment_engine)
   # Environments without intrinsic exploration rewards.
   # pylint: disable=g-long-lambda
   create_dmlab_single_env = functools.partial(create_single_env,
