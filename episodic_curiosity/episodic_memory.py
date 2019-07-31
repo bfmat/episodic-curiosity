@@ -31,7 +31,7 @@ class EpisodicMemory(object):
                observation_shape,
                observation_compare_fn,
                replacement='fifo',
-               capacity=200):
+               capacity=1000):
     """Creates an episodic memory.
 
     Args:

@@ -89,7 +89,7 @@ class CuriosityEnvWrapper(VecEnvWrapper):
                observation_embedding_fn,
                target_image_shape,
                exploration_reward = 'episodic_curiosity',
-               scale_task_reward = 1.0,
+               scale_task_reward = 0.0,
                scale_surrogate_reward = 0.0,
                append_ec_reward_as_channel = False,
                bonus_reward_additive_term = 0,
@@ -122,7 +122,7 @@ class CuriosityEnvWrapper(VecEnvWrapper):
 
     self._exploration_reward = exploration_reward
     self._scale_task_reward = scale_task_reward
-    self._scale_surrogate_reward = scale_surrogate_reward
+    self._scale_surrogate_reward = 0.03
     self._exploration_reward_min_step = exploration_reward_min_step
 
     # Oracle reward.
@@ -184,7 +184,8 @@ class CuriosityEnvWrapper(VecEnvWrapper):
     embedded_observations = self._observation_embedding_fn(frames)
     similarity_to_memory = [
         episodic_memory.similarity_to_memory(embedded_observations[k],
-                                             self._vec_episodic_memory[k])
+                                             self._vec_episodic_memory[k],
+                                             similarity_aggregation='nth_largest')
         for k in range(self.venv.num_envs)
     ]
 
@@ -203,7 +204,7 @@ class CuriosityEnvWrapper(VecEnvWrapper):
         self._vec_episodic_memory[k].add(embedded_observations[k], infos[k])
     # Augment the reward with the exploration reward.
     bonus_rewards = [
-        0.0 if d else 0.5 - s + self._bonus_reward_additive_term
+        0.0 if d else 1 - s + self._bonus_reward_additive_term
         for (s, d) in zip(similarity_to_memory, dones)
     ]
     bonus_rewards = np.array(bonus_rewards)

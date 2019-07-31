@@ -192,9 +192,11 @@ def train(workdir, env_name, num_timesteps,
     # is multiplied by 1.1 (hacky) to insure at least num_timesteps are
     # performed.
 
+    learning_rate = 4.64e-05
+
     ppo2.learn(policy, env=env, nsteps=nsteps, nminibatches=nminibatches,
                lam=0.95, gamma=0.99, noptepochs=noptepochs, log_interval=1,
-               ent_coef=ent_coef,
+               ent_coef=1.78e-06,
                lr=learning_rate if is_ant else lambda f: f * learning_rate,
                cliprange=0.2 if is_ant else lambda f: f * 0.1,
                total_timesteps=int(num_timesteps * 1.1),
