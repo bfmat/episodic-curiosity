@@ -226,13 +226,33 @@ def make_atari(env_id):
     env = gym.make(env_id)
     # assert 'NoFrameskip' in env.spec.id
     env = NoopResetEnv(env, noop_max=30)
+    env = StickyActionEnv(env)
     env = MaxAndSkipEnv(env, skip=4)
     return env
+
+class StickyActionEnv(gym.Wrapper):
+    def __init__(self, env, p=0.25):
+        super(StickyActionEnv, self).__init__(env)
+        self.p = p
+        self.last_action = 0
+
+    def reset(self):
+        self.last_action = 0
+        return self.env.reset()
+
+    def step(self, action):
+        if self.unwrapped.np_random.uniform() < self.p:
+            action = self.last_action
+        self.last_action = action
+        obs, reward, done, info = self.env.step(action)
+        if reward != 0:
+            pass #print('reward:', reward)
+        return obs, reward, done, info
 
 def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, scale=False):
     """Configure environment for DeepMind-style Atari.
     """
-    env = CollectGymDataset(env, '~/ec_outputs_4')
+    env = CollectGymDataset(env, '~/ec_outputs_6')
     if 'FIRE' in env.unwrapped.get_action_meanings():
         env = FireResetEnv(env)
     env = WarpFrame(env)
