@@ -359,7 +359,7 @@ def run_training():
   policy_training_params.update({
       'workdir': workdir,
       'num_env': str(FLAGS.num_env),
-      'env_name': ('atari:BreakoutNoFrameskip-v4'),
+      'env_name': ('atari:MontezumaRevengeNoFrameskip-v4'),
       'num_timesteps': str(FLAGS.num_timesteps)})
   print('Params for scenario', FLAGS.scenario, ':\n', policy_training_params)
   tf.gfile.MakeDirs(workdir)
