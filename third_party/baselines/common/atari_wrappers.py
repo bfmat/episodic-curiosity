@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 import numpy as np
 from collections import deque
 import gym
@@ -233,7 +234,7 @@ class StickyActionEnv(gym.Wrapper):
         return self.env.reset()
 
     def step(self, action):
-        if self.unwrapped.np_random.uniform() < self.p:
+        if np.random.uniform() < self.p:
             action = self.last_action
         self.last_action = action
         obs, reward, done, info = self.env.step(action)
@@ -249,18 +250,20 @@ def make_atari(env_id):
     env = MaxAndSkipEnv(env, skip=4)
     return env
 
-def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, scale=False):
+def wrap_deepmind(env, episode_life=True, clip_rewards=True, frame_stack=False, scale=False, ep_path=None, use_reward=False):
     """Configure environment for DeepMind-style Atari.
     """
-    env = CollectGymDataset(env, '~/ec_outputs_mz')
+    env = CollectGymDataset(env, os.path.expanduser(ep_path))
     if 'FIRE' in env.unwrapped.get_action_meanings():
         env = FireResetEnv(env)
     env = WarpFrame(env)
     if scale:
         env = ScaledFloatFrame(env)
-    #if clip_rewards:
-    #    env = ClipRewardEnv(env)
-    env = NoRewardEnv(env)
+    if use_reward:
+        if clip_rewards:
+            env = ClipRewardEnv(env)
+    else:
+        env = NoRewardEnv(env)
     if frame_stack:
         env = FrameStack(env, 4)
     if episode_life:

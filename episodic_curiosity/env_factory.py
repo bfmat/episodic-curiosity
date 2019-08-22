@@ -34,6 +34,7 @@ from third_party.baselines.bench import Monitor
 from third_party.baselines.common import atari_wrappers
 from third_party.baselines.common.vec_env import subproc_vec_env
 from third_party.baselines.common.vec_env import threaded_vec_env
+from third_party.baselines.common.collect_gym_dataset import CollectGymDataset
 from third_party.keras_resnet import models
 import gin
 
@@ -170,6 +171,10 @@ def create_single_env(env_name, seed, dmlab_homepath, use_monitor,
       action_set=get_action_set(action_set),
       main_observation=main_observation)
 
+  env = atari_wrappers.StickyActionEnv(env)
+
+  env = CollectGymDataset(env, os.path.expanduser(FLAGS.ep_path), atari=False)
+
   if run_oracle_before_monitor:
     env = dmlab_utils.OracleRewardWrapper(env)
 
@@ -190,7 +195,7 @@ def create_single_atari_env(env_name, seed, use_monitor, split=''):
   if use_monitor:
     env = Monitor(
         env, logger.get_dir() and os.path.join(logger.get_dir(), str(seed)))
-  env = atari_wrappers.wrap_deepmind(env, frame_stack=True)
+  env = atari_wrappers.wrap_deepmind(env, frame_stack=True, ep_path=FLAGS.ep_path)
   return env
 
 

@@ -59,7 +59,7 @@ flags.DEFINE_integer('run_number',
 flags.DEFINE_integer('num_timesteps', 20000000,
                      'Number of training timesteps to run.')
 
-flags.DEFINE_integer('num_env', 16,
+flags.DEFINE_integer('num_env', 1,
                      'Number of envs to run in parallel for training the '
                      'policy.')
 
@@ -71,6 +71,14 @@ flags.DEFINE_string('r_networks_path',
                     'If not specified, we first generate the R network '
                     'training data, train the R network and then train the '
                     'policy.')
+
+flags.DEFINE_string('ep_path', None, 'Path to save episodes.')
+
+flags.DEFINE_integer('use_reward', None, 'Use reward.')
+
+flags.DEFINE_integer('atari', None, 'Use Atari instead of DMLab.')
+
+flags.DEFINE_string('atari_env', None, 'Atari environment to use.')
 
 PYTHON_BINARY = 'python'
 
@@ -356,11 +364,20 @@ def run_training():
     raise NotImplementedError(
         'method {} is not implemented.'.format(FLAGS.method))
 
+  if FLAGS.atari:
+      env_name = 'atari:' + FLAGS.atari_env
+  else:
+      env_name = 'dmlab:' + constants.Const.find_level_by_scenario(FLAGS.scenario).fully_qualified_name
+
   policy_training_params.update({
       'workdir': workdir,
       'num_env': str(FLAGS.num_env),
-      'env_name': ('atari:MontezumaRevengeNoFrameskip-v4'),
-      'num_timesteps': str(FLAGS.num_timesteps)})
+      'env_name': env_name,
+      'num_timesteps': str(FLAGS.num_timesteps),
+      'ep_path': FLAGS.ep_path,
+      'use_reward': FLAGS.use_reward,
+      '_gin.create_environments.environment_engine': 'atari' if FLAGS.atari else 'dmlab'
+  })
   print('Params for scenario', FLAGS.scenario, ':\n', policy_training_params)
   tf.gfile.MakeDirs(workdir)
   base_command = [PYTHON_BINARY, '-m', 'episodic_curiosity.train_policy']

@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from absl import flags
 from collections import deque
 import os.path as osp
 import time
@@ -15,6 +16,7 @@ from third_party.baselines.ppo2 import pathak_utils
 import numpy as np
 import tensorflow as tf
 
+FLAGS = flags.FLAGS
 
 class Model(object):
 
@@ -231,8 +233,11 @@ class Runner(AbstractEnvRunner):
         # Clip to [-1, 1] range intrinsic reward.
         intrinsic_reward = [
             max(min(x, 1.0), -1.0) for x in intrinsic_reward]
-        #rewards += intrinsic_reward
-        rewards = intrinsic_reward
+        print(FLAGS.use_reward)
+        if FLAGS.use_reward:
+            rewards += intrinsic_reward
+        else:
+            rewards = intrinsic_reward
 
       for info in infos:
         maybeepinfo = info.get('episode')

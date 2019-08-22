@@ -64,6 +64,8 @@ flags.DEFINE_float('forward_inverse_ratio', 0.2,
                    'algorithm')
 flags.DEFINE_float('curiosity_loss_strength', 10,
                    'Weight of the curiosity loss in Pathak\'s algorithm.')
+flags.DEFINE_string('ep_path', None, 'Path to save episodes.')
+flags.DEFINE_integer('use_reward', None, 'Use reward.')
 
 
 # pylint: disable=g-inconsistent-quotes
