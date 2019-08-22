@@ -59,7 +59,7 @@ flags.DEFINE_integer('run_number',
 flags.DEFINE_integer('num_timesteps', 20000000,
                      'Number of training timesteps to run.')
 
-flags.DEFINE_integer('num_env', 1,
+flags.DEFINE_integer('num_env', 16,
                      'Number of envs to run in parallel for training the '
                      'policy.')
 
